@@ -1,0 +1,94 @@
+@model Jogador
+
+@{
+    ViewData["Title"] = "Jogador";
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipes</title>
+    <link rel="stylesheet" href="~/css/jogadores.css">
+</head>
+
+<main>
+
+    <section class="container-grid cadastro-equipes">
+
+        @if (ViewBag.UserName == null)
+        {
+            <div class="frm-cad-equipe">
+                <div class="cadequipe-titulo">
+                <h1>Faça o login para acessar</h1>
+                <hr>
+                </div>
+                <button type="submit">
+                <a asp-area="" asp-controller="Login" asp-action="Index">Login</a>
+                </button>
+            </div>
+        }
+        else
+        {
+
+            <form class="frm-cad-equipe" method="post" action='@Url.Action("Cadastrar")' enctype="multipart/form-data">
+                <div class="cadequipe-titulo">
+                    <h1>Cadastro de Jogadores</h1>
+                    <hr>
+                </div>
+
+                <select class="campo-entrada" id="Equipe" name="Equipe">
+                    <option value="0">Selecione uma Equipe</option>
+                    @foreach (Equipe equipe in ViewBag.equipe)
+                    {
+                        <option id="Time" value="@equipe.IdEquipe">@equipe.Nome</option>
+                    }
+                </select>
+
+                <input class="campo-entrada" type="text" name="Nome" required id="nome-jogador"
+                    placeholder="Digite o nome do Jogador:">
+                <input class="campo-entrada" type="text" name="Email" id="email-jogador"
+                    placeholder="Digite o Email do Jogador:">
+                <input class="campo-entrada" type="password" name="Senha" id="senha" placeholder="Digite a Senha:">
+
+                <button type="submit">Cadastrar</button>
+
+            </form>
+
+            <!-- TABELA CADASTRO DE EQUIPES -->
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Jogador jogador in ViewBag.Jogador)
+                    {
+                        <tr>
+                            <td>@jogador.IdJogador</td>
+                            <td>@jogador.Nome</td>
+                            <td>@jogador.Email</td>
+                            <td><img class="green-play" src="/img/Equipes/@jogador.Equipe.Imagem"
+                                    alt="Imagem do escudo da equipe @jogador.Equipe.Nome">
+                            </td>
+                            <td>
+                                <a asp-area="" asp-controller="Jogador" asp-action="Excluir" asp-route-id="@jogador.IdJogador">
+                                    <img class="yellow-trash" src="~/assets/trash.png" alt="">
+                                </a>
+                                -
+                                <a asp-area="" asp-controller="Jogador" asp-action="Editar" asp-route-id="@jogador.IdJogador">
+                                    <img class="yellow-trash" src="~/assets/editar.png" alt="" />
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </section>
+</main>
